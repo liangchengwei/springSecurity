@@ -1,0 +1,52 @@
+将redis-3.0.2.tar.gz上传到82、83、84 的/usr/local/目录下
+tar -zxvf redis-3.0.2.tar.gz
+cd /usr/local/redis-3.0.2
+make & make install
+报错：cc 未发现
+安装gcc
+yum  install  gcc
+
+创建目录
+mkdir -p /usr/local/cluster
+
+在82中
+mkdir -p /usr/local/cluster/7000
+mkdir -p /usr/local/cluster/7001
+在83中
+mkdir -p /usr/local/cluster/7002
+mkdir -p /usr/local/cluster/7003
+在84中
+mkdir -p /usr/local/cluster/7004
+mkdir -p /usr/local/cluster/7005
+
+三主三从
+主:192.168.88.82:7000;192.168.88.83:7002;192.168.88.84:7004;
+从:192.168.88.82:7001;192.168.88.83:7003;192.168.88.84:7005;
+
+
+192.168.88.82
+cd /usr/local/cluster/7000/
+/usr/local/redis-3.0.2/src/redis-server redis.conf
+cd /usr/local/cluster/7001/
+/usr/local/redis-3.0.2/src/redis-server redis.conf
+
+
+192.168.88.83
+cd /usr/local/cluster/7002/
+/usr/local/redis-3.0.2/src/redis-server redis.conf
+cd /usr/local/cluster/7003/
+/usr/local/redis-3.0.2/src/redis-server redis.conf
+
+192.168.88.84
+cd /usr/local/cluster/7004/
+/usr/local/redis-3.0.2/src/redis-server redis.conf
+cd /usr/local/cluster/7005/
+/usr/local/redis-3.0.2/src/redis-server redis.conf
+
+,创建redis集群
+cd /usr/local/redis-3.0.2/src
+./redis-trib.rb  create --replicas 1 192.168.88.82:7000 192.168.88.83:7002 192.168.88.84:7004 192.168.88.82:7001 192.168.88.83:7003 192.168.88.84:7005
+
+
+安装ruby
+yum install ruby
